@@ -1,5 +1,6 @@
 using System;
 using System.Configuration;
+using System.Data.SqlClient;
 using System.Web.UI;
 using LegacyBank.Web.Data;
 using LegacyBank.Web.Logging;
@@ -22,11 +23,11 @@ namespace LegacyBank.Web.Pages.Notifications
                 string sql = @"INSERT INTO Notifications (CustomerId, Subject, Body, CreatedAt, Status) 
                               VALUES (@CustomerId, @Subject, @Body, @CreatedAt, @Status)";
                 Db.ExecuteNonQuery(sql, 
-                    new System.Data.SQLite.SQLiteParameter("@CustomerId", customerId),
-                    new System.Data.SQLite.SQLiteParameter("@Subject", subject),
-                    new System.Data.SQLite.SQLiteParameter("@Body", body),
-                    new System.Data.SQLite.SQLiteParameter("@CreatedAt", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
-                    new System.Data.SQLite.SQLiteParameter("@Status", "Sent"));
+                    new SqlParameter("@CustomerId", customerId),
+                    new SqlParameter("@Subject", subject),
+                    new SqlParameter("@Body", body),
+                    new SqlParameter("@CreatedAt", DateTime.Now),
+                    new SqlParameter("@Status", "Sent"));
                 
                 // Pretend to send email (no actual SMTP if not configured)
                 string smtpHost = ConfigurationManager.AppSettings["smtpHost"];

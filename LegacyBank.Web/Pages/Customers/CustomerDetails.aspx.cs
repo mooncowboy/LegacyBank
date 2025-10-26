@@ -1,6 +1,6 @@
 using System;
 using System.Configuration;
-using System.Data.SQLite;
+using System.Data.SqlClient;
 using System.Web.UI;
 using LegacyBank.Web.Data;
 using LegacyBank.Web.Logging;
@@ -31,13 +31,13 @@ namespace LegacyBank.Web.Pages.Customers
         private void LoadCustomerDetails(int customerId)
         {
             // Mixed data access: inline SQL + Db helper
-            using (var conn = new SQLiteConnection(ConfigurationManager.ConnectionStrings["LegacyBankDb"].ConnectionString))
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["LegacyBankDb"].ConnectionString))
             {
                 conn.Open();
                 
                 // Get customer info (inline SQL)
                 string sql = "SELECT Name, NationalId, RiskRating FROM Customers WHERE Id = @Id";
-                using (var cmd = new SQLiteCommand(sql, conn))
+                using (var cmd = new SqlCommand(sql, conn))
                 {
                     cmd.Parameters.AddWithValue("@Id", customerId);
                     using (var reader = cmd.ExecuteReader())
@@ -57,19 +57,18 @@ namespace LegacyBank.Web.Pages.Customers
             
             // Get accounts (using Db helper)
             string accountsSql = "SELECT Id, IBAN, Balance FROM Accounts WHERE CustomerId = @CustomerId";
-            var accountsDt = Db.ExecuteDataTable(accountsSql, new SQLiteParameter("@CustomerId", customerId));
+            var accountsDt = Db.ExecuteDataTable(accountsSql, new SqlParameter("@CustomerId", customerId));
             gvAccounts.DataSource = accountsDt;
             gvAccounts.DataBind();
             
             // Get last 5 transactions (inline SQL)
             string transSql = @"
-                SELECT t.Id, t.AccountId, t.TxDate, t.Amount, t.Type 
+                SELECT TOP 5 t.Id, t.AccountId, t.TxDate, t.Amount, t.Type 
                 FROM Transactions t
                 INNER JOIN Accounts a ON t.AccountId = a.Id
                 WHERE a.CustomerId = @CustomerId
-                ORDER BY t.TxDate DESC
-                LIMIT 5";
-            var transDt = Db.ExecuteDataTable(transSql, new SQLiteParameter("@CustomerId", customerId));
+                ORDER BY t.TxDate DESC";
+            var transDt = Db.ExecuteDataTable(transSql, new SqlParameter("@CustomerId", customerId));
             gvTransactions.DataSource = transDt;
             gvTransactions.DataBind();
         }

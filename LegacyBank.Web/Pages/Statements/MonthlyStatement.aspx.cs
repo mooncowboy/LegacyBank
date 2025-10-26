@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using System.Data.SqlClient;
 using System.Text;
 using System.Web.UI;
 using LegacyBank.Web.Data;
@@ -46,14 +47,14 @@ namespace LegacyBank.Web.Pages.Statements
                 string sql = @"SELECT TxDate, Amount, Type 
                               FROM Transactions 
                               WHERE AccountId = @AccountId 
-                              AND strftime('%Y', TxDate) = @Year 
-                              AND strftime('%m', TxDate) = @Month
+                              AND YEAR(TxDate) = @Year 
+                              AND MONTH(TxDate) = @Month
                               ORDER BY TxDate";
                 
                 _statementData = Db.ExecuteDataTable(sql, 
-                    new System.Data.SQLite.SQLiteParameter("@AccountId", accountId),
-                    new System.Data.SQLite.SQLiteParameter("@Year", year.ToString()),
-                    new System.Data.SQLite.SQLiteParameter("@Month", month.ToString("D2")));
+                    new SqlParameter("@AccountId", accountId),
+                    new SqlParameter("@Year", year),
+                    new SqlParameter("@Month", month));
                 
                 Cache.Insert(cacheKey, _statementData, null, DateTime.Now.AddMinutes(5), System.Web.Caching.Cache.NoSlidingExpiration);
             }

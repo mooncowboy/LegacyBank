@@ -1,6 +1,5 @@
 using System;
 using System.Configuration;
-using System.Data.SQLite;
 using System.Web.UI;
 using LegacyBank.Web.Data;
 using LegacyBank.Web.Logging;

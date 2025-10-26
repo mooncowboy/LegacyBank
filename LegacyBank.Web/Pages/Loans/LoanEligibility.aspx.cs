@@ -1,7 +1,7 @@
 using System;
 using System.Configuration;
 using System.Data;
-using System.Data.SQLite;
+using System.Data.SqlClient;
 using System.Web.UI;
 using LegacyBank.Web.Data;
 using LegacyBank.Web.Logging;
@@ -74,20 +74,20 @@ namespace LegacyBank.Web.Pages.Loans
             DateTime threeMonthsAgo = DateTime.Now.AddMonths(-3);
             
             string sql = @"
-                SELECT AVG(MonthlySum) as AvgInflow
+                SELECT AVG(CAST(MonthlySum AS DECIMAL(18,2))) as AvgInflow
                 FROM (
-                    SELECT strftime('%Y-%m', t.TxDate) as Month, SUM(t.Amount) as MonthlySum
+                    SELECT FORMAT(t.TxDate, 'yyyy-MM') as Month, SUM(t.Amount) as MonthlySum
                     FROM Transactions t
                     INNER JOIN Accounts a ON t.AccountId = a.Id
                     WHERE a.CustomerId = @CustomerId 
                         AND t.Amount > 0 
                         AND t.TxDate >= @ThreeMonthsAgo
-                    GROUP BY strftime('%Y-%m', t.TxDate)
+                    GROUP BY FORMAT(t.TxDate, 'yyyy-MM')
                 ) MonthlyTotals";
 
             var result = Db.ExecuteScalar(sql, 
-                new SQLiteParameter("@CustomerId", customerId),
-                new SQLiteParameter("@ThreeMonthsAgo", threeMonthsAgo.ToString("yyyy-MM-dd HH:mm:ss")));
+                new SqlParameter("@CustomerId", customerId),
+                new SqlParameter("@ThreeMonthsAgo", threeMonthsAgo));
 
             return result != null && result != DBNull.Value ? Convert.ToDecimal(result) : 0;
         }
@@ -95,7 +95,7 @@ namespace LegacyBank.Web.Pages.Loans
         private decimal CalculateDTI(int customerId)
         {
             // Inline SQL (legacy smell)
-            using (var conn = new SQLiteConnection(ConfigurationManager.ConnectionStrings["LegacyBankDb"].ConnectionString))
+            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["LegacyBankDb"].ConnectionString))
             {
                 conn.Open();
                 string sql = @"
@@ -104,9 +104,9 @@ namespace LegacyBank.Web.Pages.Loans
                     FROM Transactions t
                     INNER JOIN Accounts a ON t.AccountId = a.Id
                     WHERE a.CustomerId = @CustomerId 
-                        AND t.TxDate >= date('now', '-3 months')";
+                        AND t.TxDate >= DATEADD(MONTH, -3, GETDATE())";
 
-                using (var cmd = new SQLiteCommand(sql, conn))
+                using (var cmd = new SqlCommand(sql, conn))
                 {
                     cmd.Parameters.AddWithValue("@CustomerId", customerId);
                     using (var reader = cmd.ExecuteReader())

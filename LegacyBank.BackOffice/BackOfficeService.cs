@@ -1,7 +1,7 @@
 using System;
 using System.Configuration;
 using System.Data;
-using System.Data.SQLite;
+using System.Data.SqlClient;
 
 namespace LegacyBank.BackOffice
 {
@@ -24,12 +24,12 @@ namespace LegacyBank.BackOffice
             try
             {
                 // Find first account for customer
-                using (var conn = new SQLiteConnection(ConnectionString))
+                using (var conn = new SqlConnection(ConnectionString))
                 {
                     conn.Open();
                     
                     var accountId = 0;
-                    using (var cmd = new SQLiteCommand("SELECT Id FROM Accounts WHERE CustomerId = @CustomerId LIMIT 1", conn))
+                    using (var cmd = new SqlCommand("SELECT TOP 1 Id FROM Accounts WHERE CustomerId = @CustomerId", conn))
                     {
                         cmd.Parameters.AddWithValue("@CustomerId", customerId);
                         var result = cmd.ExecuteScalar();
@@ -41,7 +41,7 @@ namespace LegacyBank.BackOffice
                     }
 
                     // Update account balance (no transaction scope - legacy smell)
-                    using (var cmd = new SQLiteCommand("UPDATE Accounts SET Balance = Balance + @Amount WHERE Id = @AccountId", conn))
+                    using (var cmd = new SqlCommand("UPDATE Accounts SET Balance = Balance + @Amount WHERE Id = @AccountId", conn))
                     {
                         cmd.Parameters.AddWithValue("@Amount", amount);
                         cmd.Parameters.AddWithValue("@AccountId", accountId);
@@ -49,12 +49,12 @@ namespace LegacyBank.BackOffice
                     }
 
                     // Insert transaction
-                    using (var cmd = new SQLiteCommand(
+                    using (var cmd = new SqlCommand(
                         "INSERT INTO Transactions (AccountId, TxDate, Amount, Type) VALUES (@AccountId, @TxDate, @Amount, @Type)",
                         conn))
                     {
                         cmd.Parameters.AddWithValue("@AccountId", accountId);
-                        cmd.Parameters.AddWithValue("@TxDate", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                        cmd.Parameters.AddWithValue("@TxDate", DateTime.Now);
                         cmd.Parameters.AddWithValue("@Amount", amount);
                         cmd.Parameters.AddWithValue("@Type", amount >= 0 ? "Credit" : "Debit");
                         cmd.ExecuteNonQuery();
@@ -86,15 +86,15 @@ namespace LegacyBank.BackOffice
         {
             var ds = new DataSet();
             
-            using (var conn = new SQLiteConnection(ConnectionString))
+            using (var conn = new SqlConnection(ConnectionString))
             {
                 conn.Open();
-                using (var cmd = new SQLiteCommand(
+                using (var cmd = new SqlCommand(
                     "SELECT a.Id, a.IBAN, a.Balance FROM Accounts a WHERE a.CustomerId = @CustomerId",
                     conn))
                 {
                     cmd.Parameters.AddWithValue("@CustomerId", customerId);
-                    using (var adapter = new SQLiteDataAdapter(cmd))
+                    using (var adapter = new SqlDataAdapter(cmd))
                     {
                         adapter.Fill(ds, "Balances");
                     }

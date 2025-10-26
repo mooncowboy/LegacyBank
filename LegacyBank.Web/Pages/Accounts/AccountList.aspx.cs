@@ -1,4 +1,5 @@
 using System;
+using System.Data.SqlClient;
 using System.Web.UI;
 using LegacyBank.Web.Data;
 using LegacyBank.Web.Logging;
@@ -28,7 +29,7 @@ namespace LegacyBank.Web.Pages.Accounts
                 int customerId = int.Parse(txtCustomerId.Text);
                 Log.Info($"Loading accounts for customer {customerId}");
                 string sql = "SELECT Id, IBAN, Balance FROM Accounts WHERE CustomerId = @CustomerId";
-                var dt = Db.ExecuteDataTable(sql, new System.Data.SQLite.SQLiteParameter("@CustomerId", customerId));
+                var dt = Db.ExecuteDataTable(sql, new SqlParameter("@CustomerId", customerId));
                 gvAccounts.DataSource = dt;
                 gvAccounts.DataBind();
             }

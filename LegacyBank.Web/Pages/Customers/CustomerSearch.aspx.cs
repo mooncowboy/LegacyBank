@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using System.Data.SqlClient;
 using System.Web.UI;
 using LegacyBank.Web.Data;
 using LegacyBank.Web.Logging;
@@ -72,7 +73,7 @@ namespace LegacyBank.Web.Pages.Customers
         {
             // N+1 query (legacy smell)
             string sql = "SELECT COALESCE(SUM(Balance), 0) FROM Accounts WHERE CustomerId = @CustomerId";
-            var result = Db.ExecuteScalar(sql, new System.Data.SQLite.SQLiteParameter("@CustomerId", customerId));
+            var result = Db.ExecuteScalar(sql, new SqlParameter("@CustomerId", customerId));
             return result != null && result != DBNull.Value ? Convert.ToDecimal(result) : 0;
         }
     }

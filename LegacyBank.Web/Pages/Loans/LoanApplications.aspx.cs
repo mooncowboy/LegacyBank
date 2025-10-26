@@ -1,6 +1,6 @@
 using System;
 using System.Configuration;
-using System.Data.SQLite;
+using System.Data.SqlClient;
 using System.Web.UI.WebControls;
 using LegacyBank.Web.Data;
 using LegacyBank.Web.Logging;
@@ -38,17 +38,17 @@ namespace LegacyBank.Web.Pages.Loans
                 Log.Info($"Submitting new loan application for CustomerId: {customerId}, Amount: {amount}");
 
                 // Direct inline SQL insert (legacy smell)
-                using (var conn = new SQLiteConnection(ConfigurationManager.ConnectionStrings["LegacyBankDb"].ConnectionString))
+                using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["LegacyBankDb"].ConnectionString))
                 {
                     conn.Open();
                     string sql = "INSERT INTO LoanApplications (CustomerId, Amount, TermMonths, Status, CreatedAt) VALUES (@CustomerId, @Amount, @TermMonths, @Status, @CreatedAt)";
-                    using (var cmd = new SQLiteCommand(sql, conn))
+                    using (var cmd = new SqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@CustomerId", customerId);
                         cmd.Parameters.AddWithValue("@Amount", amount);
                         cmd.Parameters.AddWithValue("@TermMonths", termMonths);
                         cmd.Parameters.AddWithValue("@Status", "Pending");
-                        cmd.Parameters.AddWithValue("@CreatedAt", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                        cmd.Parameters.AddWithValue("@CreatedAt", DateTime.Now);
                         cmd.ExecuteNonQuery();
                     }
                 }
@@ -87,11 +87,11 @@ namespace LegacyBank.Web.Pages.Loans
                 Log.Info($"Updating loan application {id} status to: {newStatus}");
 
                 // Inline SQL update - no validation (legacy smell)
-                using (var conn = new SQLiteConnection(ConfigurationManager.ConnectionStrings["LegacyBankDb"].ConnectionString))
+                using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["LegacyBankDb"].ConnectionString))
                 {
                     conn.Open();
                     string sql = "UPDATE LoanApplications SET Status = @Status WHERE Id = @Id";
-                    using (var cmd = new SQLiteCommand(sql, conn))
+                    using (var cmd = new SqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@Status", newStatus);
                         cmd.Parameters.AddWithValue("@Id", id);

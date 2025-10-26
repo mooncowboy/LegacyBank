@@ -1,7 +1,7 @@
 using System;
 using System.Configuration;
 using System.Data;
-using System.Data.SQLite;
+using System.Data.SqlClient;
 
 namespace LegacyBank.Web.Data
 {
@@ -12,12 +12,12 @@ namespace LegacyBank.Web.Data
             get { return ConfigurationManager.ConnectionStrings["LegacyBankDb"].ConnectionString; }
         }
 
-        public static object ExecuteScalar(string sql, params SQLiteParameter[] parameters)
+        public static object ExecuteScalar(string sql, params SqlParameter[] parameters)
         {
-            using (var conn = new SQLiteConnection(ConnectionString))
+            using (var conn = new SqlConnection(ConnectionString))
             {
                 conn.Open();
-                using (var cmd = new SQLiteCommand(sql, conn))
+                using (var cmd = new SqlCommand(sql, conn))
                 {
                     if (parameters != null)
                     {
@@ -28,12 +28,12 @@ namespace LegacyBank.Web.Data
             }
         }
 
-        public static int ExecuteNonQuery(string sql, params SQLiteParameter[] parameters)
+        public static int ExecuteNonQuery(string sql, params SqlParameter[] parameters)
         {
-            using (var conn = new SQLiteConnection(ConnectionString))
+            using (var conn = new SqlConnection(ConnectionString))
             {
                 conn.Open();
-                using (var cmd = new SQLiteCommand(sql, conn))
+                using (var cmd = new SqlCommand(sql, conn))
                 {
                     if (parameters != null)
                     {
@@ -44,18 +44,18 @@ namespace LegacyBank.Web.Data
             }
         }
 
-        public static DataTable ExecuteDataTable(string sql, params SQLiteParameter[] parameters)
+        public static DataTable ExecuteDataTable(string sql, params SqlParameter[] parameters)
         {
-            using (var conn = new SQLiteConnection(ConnectionString))
+            using (var conn = new SqlConnection(ConnectionString))
             {
                 conn.Open();
-                using (var cmd = new SQLiteCommand(sql, conn))
+                using (var cmd = new SqlCommand(sql, conn))
                 {
                     if (parameters != null)
                     {
                         cmd.Parameters.AddRange(parameters);
                     }
-                    using (var adapter = new SQLiteDataAdapter(cmd))
+                    using (var adapter = new SqlDataAdapter(cmd))
                     {
                         var dt = new DataTable();
                         adapter.Fill(dt);
@@ -65,18 +65,18 @@ namespace LegacyBank.Web.Data
             }
         }
 
-        public static DataSet ExecuteDataSet(string sql, params SQLiteParameter[] parameters)
+        public static DataSet ExecuteDataSet(string sql, params SqlParameter[] parameters)
         {
-            using (var conn = new SQLiteConnection(ConnectionString))
+            using (var conn = new SqlConnection(ConnectionString))
             {
                 conn.Open();
-                using (var cmd = new SQLiteCommand(sql, conn))
+                using (var cmd = new SqlCommand(sql, conn))
                 {
                     if (parameters != null)
                     {
                         cmd.Parameters.AddRange(parameters);
                     }
-                    using (var adapter = new SQLiteDataAdapter(cmd))
+                    using (var adapter = new SqlDataAdapter(cmd))
                     {
                         var ds = new DataSet();
                         adapter.Fill(ds);
@@ -86,11 +86,11 @@ namespace LegacyBank.Web.Data
             }
         }
 
-        public static SQLiteDataReader ExecuteReader(string sql, params SQLiteParameter[] parameters)
+        public static SqlDataReader ExecuteReader(string sql, params SqlParameter[] parameters)
         {
-            var conn = new SQLiteConnection(ConnectionString);
+            var conn = new SqlConnection(ConnectionString);
             conn.Open();
-            var cmd = new SQLiteCommand(sql, conn);
+            var cmd = new SqlCommand(sql, conn);
             if (parameters != null)
             {
                 cmd.Parameters.AddRange(parameters);
