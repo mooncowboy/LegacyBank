@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8E9A2E9B-3F4C-4D5A-9E6B-1A2B3C4D5E6F}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LegacyBank.Web</RootNamespace>
+    <AssemblyName>LegacyBank.Web</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data.SQLite, Version=1.0.118.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stub.System.Data.SQLite.Core.1.0.118.0\lib\net46\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="log4net, Version=2.0.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.15\lib\net45\log4net.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Global.asax" />
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Code\Data\Db.cs" />
+    <Compile Include="App_Code\Logging\Log.cs" />
+    <Compile Include="App_Code\Models\Account.cs" />
+    <Compile Include="App_Code\Models\Customer.cs" />
+    <Compile Include="App_Code\Models\LoanApplication.cs" />
+    <Compile Include="App_Code\Models\Notification.cs" />
+    <Compile Include="App_Code\Models\Transaction.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Accounts\AccountList.aspx.cs">
+      <DependentUpon>AccountList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Accounts\AccountList.aspx.designer.cs">
+      <DependentUpon>AccountList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Accounts\AccountTransactions.aspx.cs">
+      <DependentUpon>AccountTransactions.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Accounts\AccountTransactions.aspx.designer.cs">
+      <DependentUpon>AccountTransactions.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Admin\Config.aspx.cs">
+      <DependentUpon>Config.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Admin\Config.aspx.designer.cs">
+      <DependentUpon>Config.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Audit\AuditLogs.aspx.cs">
+      <DependentUpon>AuditLogs.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Audit\AuditLogs.aspx.designer.cs">
+      <DependentUpon>AuditLogs.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Customers\CustomerDetails.aspx.cs">
+      <DependentUpon>CustomerDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Customers\CustomerDetails.aspx.designer.cs">
+      <DependentUpon>CustomerDetails.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Customers\CustomerSearch.aspx.cs">
+      <DependentUpon>CustomerSearch.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Customers\CustomerSearch.aspx.designer.cs">
+      <DependentUpon>CustomerSearch.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Loans\LoanApplications.aspx.cs">
+      <DependentUpon>LoanApplications.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Loans\LoanApplications.aspx.designer.cs">
+      <DependentUpon>LoanApplications.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Loans\LoanEligibility.aspx.cs">
+      <DependentUpon>LoanEligibility.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Loans\LoanEligibility.aspx.designer.cs">
+      <DependentUpon>LoanEligibility.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Notifications\EmailNotifications.aspx.cs">
+      <DependentUpon>EmailNotifications.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Notifications\EmailNotifications.aspx.designer.cs">
+      <DependentUpon>EmailNotifications.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Payments\PaymentHistory.aspx.cs">
+      <DependentUpon>PaymentHistory.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Payments\PaymentHistory.aspx.designer.cs">
+      <DependentUpon>PaymentHistory.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Payments\PaymentPosting.aspx.cs">
+      <DependentUpon>PaymentPosting.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Payments\PaymentPosting.aspx.designer.cs">
+      <DependentUpon>PaymentPosting.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Statements\MonthlyStatement.aspx.cs">
+      <DependentUpon>MonthlyStatement.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Statements\MonthlyStatement.aspx.designer.cs">
+      <DependentUpon>MonthlyStatement.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\CreditScoreService.asmx.cs">
+      <DependentUpon>CreditScoreService.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Services\BackOfficeService.svc.cs">
+      <DependentUpon>BackOfficeService.svc</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Pages\Accounts\AccountList.aspx" />
+    <Content Include="Pages\Accounts\AccountTransactions.aspx" />
+    <Content Include="Pages\Admin\Config.aspx" />
+    <Content Include="Pages\Audit\AuditLogs.aspx" />
+    <Content Include="Pages\Customers\CustomerDetails.aspx" />
+    <Content Include="Pages\Customers\CustomerSearch.aspx" />
+    <Content Include="Pages\Loans\LoanApplications.aspx" />
+    <Content Include="Pages\Loans\LoanEligibility.aspx" />
+    <Content Include="Pages\Notifications\EmailNotifications.aspx" />
+    <Content Include="Pages\Payments\PaymentHistory.aspx" />
+    <Content Include="Pages\Payments\PaymentPosting.aspx" />
+    <Content Include="Pages\Statements\MonthlyStatement.aspx" />
+    <Content Include="Services\CreditScoreService.asmx" />
+    <Content Include="Services\BackOfficeService.svc" />
+    <None Include="packages.config" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\logs\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LegacyBank.BackOffice\LegacyBank.BackOffice.csproj">
+      <Project>{9f0b3f0c-4e5d-5e6b-af7c-2b3c4d5e6f70}</Project>
+      <Name>LegacyBank.BackOffice</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>8080</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:8080/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

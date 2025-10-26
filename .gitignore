@@ -416,3 +416,7 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# LegacyBank specific
+**/App_Data/logs/*.log
+**/App_Data/appSettings.xml
